@@ -14,12 +14,12 @@ library(here)
 ```
 
 ### 1. Introduction
-
-A small city with a large urban park has decided to introduce a rare species of rabbits into this park - Rabbits are cute and the kids love them, and giving a rare species a new home sounds like a good idea. The urban park manager is concerned about how this rabbit population might grow over the next few decades. Rabbits have no natural predators in the region where the park is situated. The manager would like to know, approximately, how many rabbits there will be 20 years from now if the rabbits are introduced as planned. The manager reviewed the literature and found the following estimates for survival and fertility rates for the rare rabbit population, for 4 different age classes. 
+<br>
+A small city with a large urban park has decided to introduce a rare species of rabbits into this park - Rabbits are cute and the kids love them, and giving a rare species a new home sounds like a good idea. The urban park manager is concerned about how this rabbit population might grow over the next few decades. Rabbits have no natural predators in the region where the park is situated. The manager would like to know, approximately, how many rabbits there will be 20 years from now if the rabbits are introduced as planned. The manager reviewed the literature and found the following estimates for survival and fertility rates for the rare rabbit population, for 4 different age classes. <br>
 
 ### 2. Using Leslie Matrices to Evolve Populations
-
-Our first step is building a square matrix that holds the fertility and survivability for four age classes (young, sub-adults, adults and aged) of rabbit population.
+<br>
+Our first step is building a square matrix that holds the fertility and survivability for four age classes (young, sub-adults, adults and aged) of rabbit population. <br>
 
 ```{r Leslie Matrix setup}
 # Set up number of age classes
@@ -53,8 +53,8 @@ gmatrix[4,4]=0.1
 gmatrix 
 
 ```
-
-We test our matrix values for the populations in the years 1 and 2. We observe a reduced population for adults and aged groups in years 1 and 2. 
+<br>
+We test our matrix values for the populations in the years 1 and 2. We observe a reduced population for adults and aged groups in years 1 and 2. <br>
 ```{r}
 # start with an initial population of 10 adult rabbits
 p0 = rep(10, times=nclasses)
@@ -97,11 +97,13 @@ ggplot(popl, aes(timestep, pop,fill=as.factor(age)))+
 ```
 ### 3. Rabbit Population in 20 Years
 
-We use function to evolve a population through time considering:
+We use function to evolve a population through time considering:<br>
 
- * inputs = survivability, fertility, initial population, time steps
- * output = final population matrix
- * a dynamic model - difference equations - similar to our diffusion model
+ * inputs = survivability, fertility, initial population, time steps<br>
+ * output = final population matrix<br>
+ * a dynamic model - difference equations - similar to our diffusion model<br>
+ 
+We consider the rabbit parameters are annual information. Thus, we run a function to calculate the population (See Appendix) for 20 time steps (20 years). <br>
  
 ```{r multitime}
 
@@ -137,7 +139,7 @@ head(rabbit_pop)
 
 ```
 
-In 20 years, the total rabbit population reach 6.8 million individuals. Also in this year, 4.1 million individuals belong to the first age class (young).
+In 20 years, the total rabbit population reach 6.8 million individuals. Also in this year, 4.1 million individuals belong to the first age class (young).<br>
 
 ```{r}
 # add year 
@@ -181,9 +183,9 @@ ggplot(rabbit_agesl2, aes(year, poptot))+
 
 ### 4. Rabbit Population with Hawks
 
-Hawks generally only eat younger rabbits- thus they reduce the survivability of the young and sub-adults age classes (the first two classes).  The estimates are that survivability reduced to between 0.65 and 0.75 for Ages 0-1 and between 0.75 and 0.8 for Ages 1-2. You can assume that distributions are uniform
+Hawks generally only eat younger rabbits- thus they reduce the survivability of the young and sub-adults age classes (the first two classes).  The estimates are that survivability reduced to between 0.65 and 0.75 for Ages 0-1 and between 0.75 and 0.8 for Ages 1-2. We can assume that distributions are uniform. <br>
 
-Our first step is to generate the samples for the Sobel analysis.
+Our first step is to generate the samples for the Sobel analysis. <br>
 
 ```{r sobel}
 
@@ -234,8 +236,8 @@ head(sens_rabbit$X)
 nsim=nrow(sens_rabbit$X)
 
 ```
-
-Our second step is to create our wrapper function that contains our evol population function, and the parameter set selected by Sobel.
+<br>
+Our second step is to create our wrapper function that contains our evol population function, and the parameter set selected by Sobel. <br>
 
 ```{r}
 # run model and save what we care about: final population after 2 decades  
@@ -265,8 +267,8 @@ res = as.data.frame(sens_rabbit$X) %>% pmap_dbl(p_wrapper,
 
 
 ```
-
-
+<br>
+We show the results of the last year in a boxplot.<br>
 
 ```{r}
 # transform our result into a data frame
@@ -278,7 +280,8 @@ ggplot(data.frame(finalpop=res), aes(x="", y=finalpop/1000) )+
   theme_minimal()
 
 ```
-
+<br>
+We see greater dispersion for the sub-adults group. <br>
 
 ```{r}
 # give our results to sensitivity structure
@@ -291,6 +294,8 @@ sens_rabbit$T
 
 # graph the most sensitive parameter
 tmp = cbind.data.frame(sens_rabbit$X, pop12=sens_rabbit$y)
+
+plot(sens_rabbit)
 
 ggplot(tmp, aes(p12, pop12))+
   geom_point()+
