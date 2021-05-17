@@ -137,23 +137,14 @@ head(rabbit_pop)
 
 ```
 
-In 20 years, the total rabbit population reach 66.5 individuals. Also in this year, 60 individuals belong to the first age class (young).
+In 20 years, the total rabbit population reach 6.8 million individuals. Also in this year, 4.1 million individuals belong to the first age class (young).
 
 ```{r}
 # add year 
 year = seq(from=1, to=nyears)
 
 # total population kept in dataframe
-rabbit_tot = cbind.data.frame(year=year, poptot=rabbit_pop$poptot) 
-
-# plot total population per decade
-ggplot(rabbit_tot, aes(year, poptot))+
-  geom_col()+
-  labs(title="Total population per year",
-       y="Total Population",
-       x="Year") +
-  theme_minimal() +
-  scale_y_continuous(expand = c(0,0))
+# rabbit_tot = cbind.data.frame(year=year, poptot=rabbit_pop$poptot) 
 
 
 # population by age group kept in dataframe
@@ -171,6 +162,21 @@ ggplot(rabbit_agesl, aes(year, pop, fill=agecat))+
        fill="Age Group") +
   theme_minimal() +
   scale_y_continuous(expand = c(0,0))
+
+# create a new dataframe of tot pop with the information from each age class
+rabbit_agesl2 <- rabbit_agesl %>% 
+  group_by(year) %>% 
+  summarize(poptot=sum(pop))
+
+# plot total population per decade
+ggplot(rabbit_agesl2, aes(year, poptot))+
+  geom_col() +
+  labs(title="Total population per year",
+       y="Total Population",
+       x="Year") +
+  theme_minimal() +
+  scale_y_continuous(expand = c(0,0))
+
 ```
 
 ### 4. Rabbit Population with Hawks
