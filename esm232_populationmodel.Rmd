@@ -293,9 +293,10 @@ sens_rabbit$S
 sens_rabbit$T
 
 # graph the most sensitive parameter
-tmp = cbind.data.frame(sens_rabbit$X, pop12=sens_rabbit$y)
-
 plot(sens_rabbit)
+
+# plot the pop variability to each age class survivability
+tmp = cbind.data.frame(sens_rabbit$X, pop12=sens_rabbit$y)
 
 ggplot(tmp, aes(p12, pop12))+
   geom_point()+
