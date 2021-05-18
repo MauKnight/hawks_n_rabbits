@@ -2,9 +2,7 @@
 title: "ESM 232 - Rabbit Population Matrix"
 author: "Jennifer Truong, Maggie Brickner, and Mauricio Collado"
 date: "05/14/2021"
-output:
-  html_document:
-    df_print: paged
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
